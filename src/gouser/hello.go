@@ -3,6 +3,10 @@ package main
 import (
 	"errors"
 	"fmt"
+	"os"
+	"bufio"
+	"strings"
+	"strconv"
 	)
 
 func add(a, b int) int {
@@ -26,24 +30,44 @@ func divide(a, b int) (int, error) {
 
 
 func main() {
-	var num1 int = 4
-	var num2 int = 2
-	var zero int = 0
+	reader := bufio.NewReader(os.Stdin)
+  fmt.Println("Simple Shell")
+  fmt.Println("---------------------")
 
-	var result int = add(num1, num2)
-	fmt.Println("4 + 2 = ", result)
+	for {
+		fmt.Print("num1-> ")
+    text, _ := reader.ReadString('\n')
+    text = strings.Replace(text, "\n", "", -1)
+		num1, _ := strconv.Atoi(text)
 
-	result = subtract(num2, zero)
-	fmt.Println("2 - 0 = ", result)
+		fmt.Print("num2-> ")
+    text, _ = reader.ReadString('\n')
+    text = strings.Replace(text, "\n", "", -1)
+		num2, _ := strconv.Atoi(text)
 
-	result = multiply(num1, num2)
-	fmt.Println("4 * 2 = ", result)
+		fmt.Print("operator-> ")
+		text, _ = reader.ReadString('\n')
+		text = strings.Replace(text, "\n", "", -1)
+		switch text {
+		case "+":
+			var result int = add(num1, num2)
+			fmt.Printf("%d + %d = %d\n", num1, num2, result)
+		case "-":
+			var result int = subtract(num1, num2)
+			fmt.Printf("%d - %d = %d\n", num1, num2, result)
+		case "*":
+			var result int = multiply(num1, num2)
+			fmt.Printf("%d * %d = %d\n", num1, num2, result)
+		case "/":
+			result, err := divide(num1, num2)
+			if err != nil {
+						fmt.Println(err)
+					} else {
+						fmt.Printf("%d / %d = %d\n", num1,num2,result)
+					}
+		default:
+			fmt.Println("I don't know which operation u are talking about")
+		}
 
-	result,err := divide(num1, zero)
-	if err != nil {
-				fmt.Println(err)
-			} else {
-				fmt.Println("%d / %d = %d", num1,zero,result)
-			}
-
+	}
 }
